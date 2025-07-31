@@ -26,7 +26,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="data in jsonData"
+          v-for="data in filterItems"
           :key="data.id"
           class="hover:bg-gray-100 hover:bg-gray-200"
         >
@@ -93,7 +93,10 @@
           />
         </div>
         <div class="flex flex-col gap-2">
-          <label class="text-white">Name</label>
+          <div class="flex justify-between">
+            <label class="text-white">Name</label>
+            <span>required</span>
+          </div>
           <input
             v-model="nameModel"
             type="text"
@@ -112,7 +115,10 @@
         <div class="flex gap-4">
           <button
             @click="submitData"
-            class="bg-green-600 rounded-md p-2 text-white cursor-pointer hover:bg-green-700"
+            class="rounded-md p-2 text-white"
+            :class="
+              isNameExist ? 'bg-green-600 cursor-pointer' : 'bg-green-300'
+            "
           >
             Send
           </button>
@@ -137,12 +143,12 @@ onMounted(() => {
 const search = ref("");
 const filterItems = computed(() => {
   if (!search.value) {
-    return (jsonData.value = data.value["specification"]);
-  } else {
-    return jsonData.value.filter((data) =>
-      data.name.toLowerCase().includes(search.value.toLowerCase())
-    );
+    return jsonData.value;
   }
+
+  return jsonData.value.filter((data) =>
+    data.name.toLowerCase().includes(search.value.toLowerCase())
+  );
 });
 
 const isOpen = ref(false);
@@ -154,7 +160,12 @@ const groupModel = ref("");
 const nameModel = ref("");
 const sortModel = ref("");
 
+const isNameExist = computed(() => nameModel.value.length > 1);
+console.log(isNameExist.value);
+
 const submitData = () => {
+  if (!isNameExist.value) return;
+
   const data = {
     id: editID.value ?? jsonData.value.length + 1,
     vessel: vesselModel.value,
