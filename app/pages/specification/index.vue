@@ -26,16 +26,31 @@
       </thead>
       <tbody>
         <tr
-          v-for="data in filterItems"
+          v-for="data in jsonData"
           :key="data.id"
-          class="cursor-pointer hover:bg-gray-100 hover:bg-gray-200"
-          @click="$router.push(`/specification/${data.id}`)"
+          class="hover:bg-gray-100 hover:bg-gray-200"
         >
-          <td class="p-2">{{ data.name }}</td>
-          <td class="p-2">{{ data.vessel }}</td>
-          <td class="p-2">{{ data.group }} dd</td>
-          <td class="p-2 cursor-pointer">
-            <img src="/images/theedot.png" width="40" height="15" />
+          <td class="p-2" @click="$router.push(`/specification/${data.id}`)">
+            {{ data.name }}
+          </td>
+          <td @click="$router.push(`/specification/${data.id}`)" class="p-2">
+            {{ data.vessel }}
+          </td>
+          <td @click="$router.push(`/specification/${data.id}`)" class="p-2">
+            {{ data.group }}
+          </td>
+          <td class="p-2 flex gap-2">
+            <span
+              @click="editData(data)"
+              class="cursor-pointer border rounded-md bg-green-500 text-white p-2"
+              >Edit</span
+            >
+            <button
+              @click="deleteData(data.id)"
+              class="cursor-pointer border rounded-md bg-red-500 text-white p-2"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -115,7 +130,9 @@ const jsonData = ref([]);
 const { data, error, pending } = await useFetch(
   "http://localhost:3000/data/specification.json"
 );
-jsonData.value = data.value["specification"];
+onMounted(() => {
+  jsonData.value = data.value["specification"];
+});
 
 const search = ref("");
 const filterItems = computed(() => {
@@ -131,25 +148,52 @@ const filterItems = computed(() => {
 const isOpen = ref(false);
 const togglePane = () => (isOpen.value = !isOpen.value);
 
+const editID = ref();
 const vesselModel = ref("");
 const groupModel = ref("");
 const nameModel = ref("");
 const sortModel = ref("");
 
 const submitData = () => {
-  jsonData.value.push({
-    id: jsonData.value.length + 1,
+  const data = {
+    id: editID.value ?? jsonData.value.length + 1,
     vessel: vesselModel.value,
     group: groupModel.value,
     name: nameModel.value,
     sort: sortModel.value,
-  });
+  };
 
+  if (editID.value) {
+    const index = jsonData.value.findIndex((data) => data.id === editID.value);
+    if (index !== -1) {
+      jsonData.value[index] = data;
+    }
+  } else {
+    jsonData.value.push(data);
+  }
+
+  editID.value = null;
   vesselModel.value = "";
   groupModel.value = "";
   nameModel.value = "";
   sortModel.value = "";
 
   isOpen.value = false;
+};
+
+const editData = (data) => {
+  isOpen.value = true;
+
+  editID.value = data.id;
+  vesselModel.value = data.vessel;
+  groupModel.value = data.group;
+  nameModel.value = data.name;
+  sortModel.value = data.sort;
+};
+
+const deleteData = (id) => {
+  console.log(id);
+  jsonData.value = jsonData.value.filter((data) => data.id !== id);
+  console.log("After:", jsonData.value);
 };
 </script>
