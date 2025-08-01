@@ -4,7 +4,11 @@
       <span class="font-bold text-3xl">Work Order Master</span>
 
       <div class="flex gap-2">
-        <input placeholder="Cari Nama" class="p-2 rounded-md debug" />
+        <input
+          v-model="search"
+          placeholder="Cari Code"
+          class="p-2 rounded-md debug"
+        />
         <button
           class="bg-gray-800 rounded-md p-2 text-white cursor-pointer hover:bg-gray-700"
         >
@@ -13,41 +17,71 @@
       </div>
     </div>
 
-    <div class="flex flex-col gap-4">
-      <span class="text-xl font-semibold">General</span>
-      <div class="flex flex-col">
+    <div
+      v-for="(data, key) in filterItems"
+      :key="data.id"
+      class="flex flex-col gap-4"
+    >
+      <span class="text-xl font-semibold">{{ handleTitle(key) }}</span>
+      <div v-for="item in data" class="flex flex-col gap-4">
         <div
-          v-for="data in dataJSON"
-          :key="data.id"
-          class="flex justify-between items-center border border-gray-300 p-2"
+          @click="$router.push(`/work/${key}/${item.id}`)"
+          class="flex flex-col"
         >
-          <div class="flex flex-col">
-            <span class="text-blue-500 text-sm font-semibold">{{
-              data.type
-            }}</span>
-            <span class="font-semibold">{{ data.title }}</span>
-            <span class="text-gray-400">{{ data.code }}</span>
-          </div>
-          <div>
-            <div>Edit</div>
+          <div
+            class="flex justify-between items-center border border-gray-300 p-2"
+          >
+            <div class="flex flex-col">
+              <span class="text-blue-500 text-sm font-semibold">{{
+                item.type
+              }}</span>
+              <span class="font-semibold">{{ item.title }}</span>
+              <span class="text-gray-400">{{ item.code }}</span>
+            </div>
+            <div>
+              <div>Edit</div>
+            </div>
           </div>
         </div>
       </div>
-      <span class="text-xl font-semibold">Equipment for Crew </span>
-      <span class="text-xl font-semibold">Hull</span>
-      <span class="text-xl font-semibold">Machiney Main Components </span>
-      <span class="text-xl font-semibold">Ship Common Systems </span>
     </div>
   </div>
 </template>
 
 <script setup>
-const dataJSON = ref([]);
+const jsonData = ref([]);
 const { data, error, pending } = await useFetch(
   "http://localhost:3000/data/work-order.json"
 );
+onMounted(() => {
+  jsonData.value = data.value;
+});
 
-dataJSON.value = data.value["work-order"];
+const handleTitle = (title) => {
+  switch (title) {
+    case "general":
+      return "General";
+    case "equipment":
+      return "Equipment for Crew";
+    case "hull":
+      return "Hull";
+    case "machiney":
+      return "Machiney Main Components";
+    case "ship":
+      return "Ship Common Systems";
+    default:
+      break;
+  }
+};
 
-console.log(data.value["work-order"]);
+const search = ref("");
+const filterItems = computed(() => {
+  if (!search.value) {
+    return jsonData.value;
+  }
+
+  return jsonData.value.filter((data) =>
+    data.toLowerCase().includes(search.value.toLowerCase())
+  );
+});
 </script>
