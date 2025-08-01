@@ -1,5 +1,61 @@
 {
-  "work-order": [
+  "general": [
+    {
+      "id": 1,
+      "type": "PMS JOB",
+      "title": "3 Month Routine Check and Inspection El. Motor",
+      "code": "COO1"
+    },
+    {
+      "id": 2,
+      "type": "DOCK JOB",
+      "title": "6 Months Routine Check and Operate The Electro Hydraulic Controls",
+      "code": "COO3"
+    }
+  ], 
+  "equipment": [
+    {
+      "id": 1,
+      "type": "PMS JOB",
+      "title": "3 Month Routine Check and Inspection El. Motor",
+      "code": "COO1"
+    },
+    {
+      "id": 2,
+      "type": "DOCK JOB",
+      "title": "6 Months Routine Check and Operate The Electro Hydraulic Controls",
+      "code": "COO3"
+    }
+  ], 
+  "hull": [
+    {
+      "id": 1,
+      "type": "PMS JOB",
+      "title": "3 Month Routine Check and Inspection El. Motor",
+      "code": "COO1"
+    },
+    {
+      "id": 2,
+      "type": "DOCK JOB",
+      "title": "6 Months Routine Check and Operate The Electro Hydraulic Controls",
+      "code": "COO3"
+    }
+  ], 
+  "machiney": [
+    {
+      "id": 1,
+      "type": "PMS JOB",
+      "title": "3 Month Routine Check and Inspection El. Motor",
+      "code": "COO1"
+    },
+    {
+      "id": 2,
+      "type": "DOCK JOB",
+      "title": "6 Months Routine Check and Operate The Electro Hydraulic Controls",
+      "code": "COO3"
+    }
+  ], 
+  "ship": [
     {
       "id": 1,
       "type": "PMS JOB",

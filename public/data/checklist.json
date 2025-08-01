@@ -1,0 +1,22 @@
+{
+  "checklist": [
+    {
+      "id": 1,
+      "name": "Audit checklist",
+      "description": "Cleanliness Checklist",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Safety",
+      "description": "General Checklist",
+      "active": false
+    },
+    {
+      "id": 3,
+      "name": "Hot Work",
+      "description": "Hot work permits",
+      "active": true
+    }
+  ]
+}
